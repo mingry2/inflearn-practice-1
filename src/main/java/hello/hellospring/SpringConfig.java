@@ -1,14 +1,23 @@
 package hello.hellospring;
 
+import hello.hellospring.repository.JdbcMemberRepository;
+import hello.hellospring.repository.JdbcTemplateMemberRepository;
 import hello.hellospring.repository.MemberRepository;
 import hello.hellospring.repository.MemoryMemberRepository;
 import hello.hellospring.service.MemberService;
+import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 // 컴포넌트 없이 spring 빈에 등록하기
 @Configuration
 public class SpringConfig {
+
+	private DataSource dataSource;
+
+	public SpringConfig(DataSource dataSource) {
+		this.dataSource = dataSource;
+	}
 
 	@Bean
 	public MemberService memberService() {
@@ -17,7 +26,9 @@ public class SpringConfig {
 
 	@Bean
 	public MemberRepository memberRepository() {
-		return new MemoryMemberRepository();
+//		return new MemoryMemberRepository();
+//		return new JdbcMemberRepository(dataSource);
+		return new JdbcTemplateMemberRepository(dataSource);
 	}
 
 }
